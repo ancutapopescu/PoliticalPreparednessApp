@@ -15,7 +15,7 @@ import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBi
 
 class VoterInfoFragment : Fragment() {
 
-    private lateinit var _viewModel: VoterInfoViewModel
+    private lateinit var viewModel: VoterInfoViewModel
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -31,12 +31,9 @@ class VoterInfoFragment : Fragment() {
 
 
         //TODO: Add ViewModel values and create ViewModel
-        val application = requireNotNull(activity).application
-        val dataSource = ElectionDatabase.getInstance(application).electionDao
-        val electionId = VoterInfoFragmentArgs.fromBundle(requireArguments()).argElectionId
-        val division = VoterInfoFragmentArgs.fromBundle(requireArguments()).argDivision
-        val viewModelFactory = VoterInfoViewModelFactory(dataSource, electionId, division)
-        _viewModel = ViewModelProvider(this, viewModelFactory).get(VoterInfoViewModel::class.java)
+        val viewModelFactory = VoterInfoViewModelFactory(requireActivity().application, selectedElection)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(VoterInfoViewModel::class.java)
+        binding.viewModel = viewModel
 
 
 
@@ -48,23 +45,23 @@ class VoterInfoFragment : Fragment() {
 
         //TODO: Handle loading of URLs
         // Voting Locations
-        _viewModel.votingLocationUrl.observe(viewLifecycleOwner, Observer {
+        viewModel.votingLocationUrl.observe(viewLifecycleOwner, Observer {
             it?.let {
             }
         })
 
         // Ballot Information
-        _viewModel.ballotInformationUrl.observe(viewLifecycleOwner, Observer {
+        viewModel.ballotInformationUrl.observe(viewLifecycleOwner, Observer {
 
             it?.let {
                 loadUrl(it)
-                _viewModel.ballotInformationNavigated()
+                viewModel.ballotInformationNavigated()
             }
         })
 
         //TODO: Handle save button UI state
         //TODO: cont'd Handle save button clicks
-        _viewModel.isElectionSaved.observe(viewLifecycleOwner, Observer {  isElectionSaved ->
+        viewModel.isElectionSaved.observe(viewLifecycleOwner, Observer {  isElectionSaved ->
             if (isElectionSaved) {
                 binding.followUnfollowButton.text = getString(R.string.follow_button)
             } else {

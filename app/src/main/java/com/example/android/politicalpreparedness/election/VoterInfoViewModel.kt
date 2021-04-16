@@ -3,15 +3,14 @@ package com.example.android.politicalpreparedness.election
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.database.ElectionDao
+import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 import kotlinx.coroutines.launch
 
-class VoterInfoViewModel(private val dataSource: ElectionDao,
-                         private val electionId: Int,
-                         private val division: Division) : ViewModel() {
+class VoterInfoViewModel(private val database: ElectionDatabase, private val election: Election) : ViewModel() {
 
     //TODO: Add live data to hold voter info
     private val _voterInfo = MutableLiveData<VoterInfoResponse>()
@@ -55,10 +54,6 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
 
     fun votingLocationsClick() {
         _votingLocationsUrl.value = _voterInfo.value?.state?.get(0)?.electionAdministrationBody?.votingLocationFinderUrl
-    }
-
-    fun votingLocationNavigated() {
-        _votingLocationsUrl.value = null
     }
 
     // Ballot Information
@@ -105,11 +100,4 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
             saveElectionToDatabase()
         }
     }
-
-    /*fun getElectionFromDb() {
-        viewModelScope.launch {
-            savedElection = dataSource.getElectionById(electionId)
-            _isElectionSaved.value = savedElection != null
-        }
-    }*/
 }

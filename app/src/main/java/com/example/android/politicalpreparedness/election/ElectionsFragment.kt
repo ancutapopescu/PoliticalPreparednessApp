@@ -41,11 +41,10 @@ class ElectionsFragment: Fragment() {
         //Add an observer on navigateToDetailElection that calls navigate() to go
         // to the detail screen when the Election is not null.
         viewModel.navigateToDetailElection.observe(viewLifecycleOwner, Observer {
-            if (null != it) {
-                this.findNavController()
-                        .navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
-                                it.id, it.division))
+            it?.let {
                 viewModel.onElectionNavigated()
+                this.findNavController().navigate(
+                        ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it))
             }
         })
 

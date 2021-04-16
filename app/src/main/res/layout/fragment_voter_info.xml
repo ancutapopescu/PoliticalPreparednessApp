@@ -81,7 +81,7 @@
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
             android:layout_marginTop="@dimen/margin_normal"
             app:text="@{viewModel.voterInfo.election.electionDay.toString()}"
-            tools:text="12 November 2055"
+            tools:text="22 October 2021"
             style="@style/subtitle"/>
 
         <!-- TODO: Add visual styling and content -->
