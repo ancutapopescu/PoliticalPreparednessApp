@@ -52,7 +52,7 @@ class DetailFragment : Fragment() {
 
         viewModel.address.observe(viewLifecycleOwner, Observer {
             it?.let {
-                binding.state.setNewValue(it)
+                binding.state.setNewValue(it.state)
             }
         })
 
