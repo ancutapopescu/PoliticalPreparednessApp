@@ -43,7 +43,8 @@ class ElectionsFragment: Fragment() {
         viewModel.navigateToDetailElection.observe(viewLifecycleOwner, Observer {
             if (null != it) {
                 this.findNavController()
-                        .navigate(ElectionsFragmentDirections.actionShowDetail(it))
+                        .navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
+                                it.id, it.division))
                 viewModel.onElectionNavigated()
             }
         })
