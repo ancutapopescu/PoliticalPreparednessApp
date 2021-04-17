@@ -10,10 +10,11 @@ import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 
 //TODO: Create Factory to generate VoterInfoViewModel with provided election datasource
-class VoterInfoViewModelFactory(private val context: Context, private val election: Election): ViewModelProvider.Factory {
+class VoterInfoViewModelFactory(val election: Election, application: Application): ViewModelProvider.Factory {
+    @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(VoterInfoViewModel::class.java)) {
-            return VoterInfoViewModel(ElectionDatabase.getInstance(context), election) as T
+            return VoterInfoViewModel(election, application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

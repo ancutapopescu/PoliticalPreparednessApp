@@ -4,47 +4,39 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.database.ElectionDatabase
+import com.example.android.politicalpreparedness.database.ElectionDatabase.Companion.getInstance
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class VoterInfoViewModel(private val database: ElectionDatabase, private val election: Election) : ViewModel() {
+class VoterInfoViewModel(val election: Election, application: Application) : ViewModel() {
+
+    // Create the database singleton.
+    // Define a database variable and assign it to getDatabase(), passing the application.
+    private val database = getInstance(application)
+
+    // Create the repository.
+    // Instantiate the variable by passing in the singleton ElectionDatabase object.
+    private val electionRepository = ElectionRepository(database)
 
     //TODO: Add live data to hold voter info
-    private val _voterInfo = MutableLiveData<VoterInfoResponse>()
-    val voterInfo: LiveData<VoterInfoResponse>
-        get() = _voterInfo
-
-    var savedElection: Election? = null
+    val voterInfo = electionRepository.voterInfo
 
     private val _isElectionSaved = MutableLiveData<Boolean>()
     val isElectionSaved: LiveData<Boolean>
         get() = _isElectionSaved
 
     //TODO: Add var and methods to populate voter info
-    init {
-        getVoterInfo()
-        getSavedElection()
-    }
-
-    private fun getVoterInfo() {
-        viewModelScope.launch {
-            var address = "country:${division.country}"
-            if(division.state.isNotEmpty()) {
-                address += "/state:${division.state}"
+    fun getVoterInfo(electionId: Int, address: String) =
+            viewModelScope.launch {
+                electionRepository.getVoterInfo(electionId, address)
             }
-            _voterInfo.value = CivicsApi.retrofitService.getVoterinfo(address, electionId)
-        }
-    }
 
-    fun getSavedElection() {
-        viewModelScope.launch {
-            savedElection = dataSource.getElectionById(electionId)
-            _isElectionSaved.value = savedElection != null
-        }
-    }
+
 
     //TODO: Add var and methods to support loading URLs
     // Voting Locations
@@ -53,7 +45,7 @@ class VoterInfoViewModel(private val database: ElectionDatabase, private val ele
         get() = _votingLocationsUrl
 
     fun votingLocationsClick() {
-        _votingLocationsUrl.value = _voterInfo.value?.state?.get(0)?.electionAdministrationBody?.votingLocationFinderUrl
+        _votingLocationsUrl.value = voterInfo.value?.state?.get(0)?.electionAdministrationBody?.votingLocationFinderUrl
     }
 
     // Ballot Information
@@ -62,7 +54,7 @@ class VoterInfoViewModel(private val database: ElectionDatabase, private val ele
         get() = _ballotInformationUrl
 
     fun ballotInformationClick() {
-        _votingLocationsUrl.value = _voterInfo.value?.state?.get(0)?.electionAdministrationBody?.ballotInfoUrl
+        _votingLocationsUrl.value = voterInfo.value?.state?.get(0)?.electionAdministrationBody?.ballotInfoUrl
     }
 
     fun ballotInformationNavigated() {
@@ -80,7 +72,7 @@ class VoterInfoViewModel(private val database: ElectionDatabase, private val ele
     private fun saveElectionToDatabase() {
         viewModelScope.launch {
             voterInfo.value?.let {
-                voterInfo.value?.let { dataSource.insert(it.election) }
+                voterInfo.value?.let { database.electionDao.insert(it.election) }
                 _isElectionSaved.value = true
             }
         }
@@ -88,7 +80,7 @@ class VoterInfoViewModel(private val database: ElectionDatabase, private val ele
 
     private fun removeElectionFromDatabase() {
         viewModelScope.launch {
-            voterInfo.value?.let { dataSource.deleteElection(it.election.id)}
+            voterInfo.value?.let { database.electionDao.deleteElection(it.election.id)}
             _isElectionSaved.value = false
         }
     }
