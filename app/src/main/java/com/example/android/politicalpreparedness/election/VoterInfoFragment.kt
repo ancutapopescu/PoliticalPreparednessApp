@@ -31,7 +31,7 @@ class VoterInfoFragment : Fragment() {
 
 
         //TODO: Add ViewModel values and create ViewModel
-        val viewModelFactory = VoterInfoViewModelFactory(requireActivity().application, selectedElection)
+        val viewModelFactory = VoterInfoViewModelFactory(selectedElection, requireActivity().application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(VoterInfoViewModel::class.java)
         binding.viewModel = viewModel
 
@@ -47,12 +47,13 @@ class VoterInfoFragment : Fragment() {
         // Voting Locations
         viewModel.votingLocationUrl.observe(viewLifecycleOwner, Observer {
             it?.let {
+                loadUrl(it)
+                viewModel.votingLocationsNavigated()
             }
         })
 
         // Ballot Information
         viewModel.ballotInformationUrl.observe(viewLifecycleOwner, Observer {
-
             it?.let {
                 loadUrl(it)
                 viewModel.ballotInformationNavigated()

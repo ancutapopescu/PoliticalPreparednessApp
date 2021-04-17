@@ -48,6 +48,10 @@ class VoterInfoViewModel(val election: Election, application: Application) : Vie
         _votingLocationsUrl.value = voterInfo.value?.state?.get(0)?.electionAdministrationBody?.votingLocationFinderUrl
     }
 
+    fun votingLocationsNavigated() {
+        _votingLocationsUrl.value = null
+    }
+
     // Ballot Information
     private val _ballotInformationUrl = MutableLiveData<String>()
     val ballotInformationUrl: LiveData<String>

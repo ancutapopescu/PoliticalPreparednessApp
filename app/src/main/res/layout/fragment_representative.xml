@@ -13,39 +13,45 @@
 
     <!-- TODO: Add motion scene to hide form on vertical scroll. -->
     <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/fragment_representative_motion_layout"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         app:layoutDescription="@xml/fragment_representative_scene">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineStart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/margin_normal" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/searchArea">
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineStartAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/margin_normal" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineEnd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/margin_normal" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineEndAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/margin_normal" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineTop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/margin_normal" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineTopAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="@dimen/margin_normal" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineBottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="@dimen/margin_normal" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineBottomAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_end="@dimen/margin_normal" />
 
-        <!-- TODO: Add visual styling and content -->
+
+            <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/search_title"
             style="@style/header"
@@ -54,8 +60,8 @@
             android:text="@string/representative_search"
             android:layout_marginTop="@dimen/margin_normal"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+            app:layout_constraintEnd_toStartOf="@id/guidelineEndAddress"
+            app:layout_constraintStart_toStartOf="@id/guidelineStartAddress" />
 
         <!-- TODO: Add data binding value -->
         <!-- TODO: Add visual styling and content -->
@@ -66,8 +72,8 @@
             android:autofillHints=""
             android:hint="@string/address_line_1"
             android:inputType="textPostalAddress"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toStartOf="@id/guidelineEndAddress"
+            app:layout_constraintStart_toStartOf="@id/guidelineStartAddress"
             app:layout_constraintTop_toBottomOf="@id/search_title"
             android:text="@{viewModel.address.line1}"/>
 
@@ -80,8 +86,8 @@
             android:autofillHints=""
             android:hint="@string/address_line_2"
             android:inputType="textPostalAddress"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toStartOf="@id/guidelineEndAddress"
+            app:layout_constraintStart_toStartOf="@id/guidelineStartAddress"
             app:layout_constraintTop_toBottomOf="@id/address_line_1"
             android:text="@{viewModel.address.line2}"/>
 
@@ -94,7 +100,7 @@
             android:autofillHints=""
             android:hint="@string/city"
             android:inputType="textPostalAddress"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintStart_toStartOf="@id/guidelineStartAddress"
             app:layout_constraintEnd_toStartOf="@id/state"
             app:layout_constraintTop_toBottomOf="@id/address_line_2"
             android:text="@{viewModel.address.city}"/>
@@ -110,7 +116,7 @@
             android:entries="@array/states"
             android:inputType="textPostalAddress"
             app:layout_constraintStart_toEndOf="@id/city"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+            app:layout_constraintEnd_toStartOf="@id/guidelineEndAddress"
             app:layout_constraintTop_toTopOf="@id/city"
             app:layout_constraintBottom_toBottomOf="@id/city"
             app:stateValue="@{viewModel.address.state}"/>
@@ -125,7 +131,7 @@
             android:hint="@string/zip"
             android:inputType="number"
             android:maxLength="5"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintStart_toStartOf="@id/guidelineStartAddress"
             app:layout_constraintEnd_toEndOf="@id/city"
             app:layout_constraintTop_toBottomOf="@id/city"
             android:text="@{viewModel.address.zip}"/>
@@ -139,8 +145,8 @@
             android:backgroundTint="@color/colorPrimaryDark"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/zip"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toStartOf="@id/guidelineEndAddress"
+            app:layout_constraintStart_toStartOf="@id/guidelineStartAddress"
             />
 
         <!-- TODO: Add visual styling and content -->
@@ -152,20 +158,62 @@
             android:backgroundTint="@color/colorPrimaryDark"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/button_search"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"/>
+            app:layout_constraintEnd_toStartOf="@id/guidelineEndAddress"
+            app:layout_constraintStart_toStartOf="@id/guidelineStartAddress"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/representativesArea"
+            app:layout_constraintTop_toBottomOf="@id/searchArea"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStartRepresentatives"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/margin_normal" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineEndRepresentatives"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/margin_normal" />
+
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTopRepresentatives"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/margin_normal" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottomRepresentatives"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="@dimen/margin_normal" />
+
 
         <!-- TODO: Add visual styling and content -->
-        <TextView
-            android:id="@+id/representative_title"
-            style="@style/header"
-            android:layout_width="0dp"
-            android:text="@string/my_representatives"
-            android:layout_marginTop="@dimen/margin_normal"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/button_location" />
+            <TextView
+                android:id="@+id/representative_title"
+                style="@style/header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/my_representatives"
+                android:layout_marginTop="@dimen/margin_normal"
+                app:layout_constraintEnd_toStartOf="@id/guidelineEndRepresentatives"
+                app:layout_constraintStart_toStartOf="@id/guidelineStartRepresentatives"
+                app:layout_constraintTop_toTopOf="parent" />
 
         <!-- TODO: Add Representatives RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
@@ -174,8 +222,8 @@
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toStartOf="@id/guidelineEndRepresentatives"
+            app:layout_constraintStart_toStartOf="@id/guidelineStartRepresentatives"
             app:layout_constraintTop_toBottomOf="@id/representative_title"
             tools:listitem="@layout/item_representative"/>
 
@@ -190,9 +238,10 @@
             motion:visibilityMode="ignore"
             app:layout_constraintTop_toBottomOf="@id/representative_title"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintEnd_toStartOf="@id/guidelineEndRepresentatives"
+            app:layout_constraintStart_toStartOf="@id/guidelineStartRepresentatives"
             />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
