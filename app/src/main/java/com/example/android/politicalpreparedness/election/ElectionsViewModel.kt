@@ -8,7 +8,7 @@ import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.launch
 
 //TODO: Construct ViewModel and provide election datasource
-class ElectionsViewModel(application: Application) : AndroidViewModel(application) {
+class ElectionsViewModel(application: Application) : ViewModel() {
 
     //TODO: Create live data val for upcoming elections
     // Create the database singleton.

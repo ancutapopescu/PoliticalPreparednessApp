@@ -24,7 +24,7 @@ class DetailFragment : Fragment() {
 
     companion object {
         //TODO: Add Constant for Location request
-        private val REQUEST_LOCATION_PERMISSION = 1
+        private const val REQUEST_LOCATION_PERMISSION = 1
     }
 
     //TODO: Declare ViewModel
