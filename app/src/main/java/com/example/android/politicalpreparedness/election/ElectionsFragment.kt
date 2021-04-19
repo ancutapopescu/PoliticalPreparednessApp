@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.election.adapter.ElectionListener
@@ -26,7 +28,11 @@ class ElectionsFragment: Fragment() {
 
         //TODO: Add binding values
         //Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
-        val binding = FragmentElectionBinding.inflate(inflater)
+        val binding: FragmentElectionBinding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_election,
+                container,
+                false)
         binding.lifecycleOwner = this
 
         //TODO: Add ViewModel values and create ViewModel

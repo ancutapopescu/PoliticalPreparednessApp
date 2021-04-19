@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -22,7 +23,11 @@ class VoterInfoFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         //TODO: Add binding values
-        val binding = FragmentVoterInfoBinding.inflate(inflater)
+        val binding: FragmentVoterInfoBinding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_voter_info,
+                container,
+                false)
 
         // This line gets the selected Election object from the Safe Args.
         val selectedElection = VoterInfoFragmentArgs.fromBundle(requireArguments()).selectedElection

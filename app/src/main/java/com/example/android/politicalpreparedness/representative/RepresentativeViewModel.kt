@@ -49,6 +49,11 @@ class RepresentativeViewModel: ViewModel() {
         _address.value = address
     }
 
+    init {
+        // Avoid a crash in case which the user clicks on find my representatives without adding any an ddress.
+        _address.value = Address("", "", "", "Alabama", "")
+    }
+
 
     //TODO: Create function to get address from individual fields
 
