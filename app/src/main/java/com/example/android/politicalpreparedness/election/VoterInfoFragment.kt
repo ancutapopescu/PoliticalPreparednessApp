@@ -42,7 +42,6 @@ class VoterInfoFragment : Fragment() {
         Hint: You will need to ensure proper data is provided from previous fragment.
          */
 
-
         //TODO: Handle loading of URLs
         // Voting Locations
         viewModel.votingLocationUrl.observe(viewLifecycleOwner, Observer {

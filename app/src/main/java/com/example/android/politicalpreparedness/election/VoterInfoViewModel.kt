@@ -31,6 +31,7 @@ class VoterInfoViewModel(val election: Election, application: Application) : Vie
         get() = _isElectionSaved
 
     //TODO: Add var and methods to populate voter info
+
     fun getVoterInfo(electionId: Int, address: String) =
             viewModelScope.launch {
                 electionRepository.getVoterInfo(electionId, address)
