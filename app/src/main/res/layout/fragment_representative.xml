@@ -9,6 +9,10 @@
         <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.representative.RepresentativeViewModel" />
+
+        <variable
+            name="address"
+            type="com.example.android.politicalpreparedness.network.models.Address" />
     </data>
 
     <!-- TODO: Add motion scene to hide form on vertical scroll. -->
@@ -174,14 +178,14 @@
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineStartRepresentatives"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_begin="@dimen/margin_normal" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineEndRepresentatives"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/margin_normal" />
@@ -230,7 +234,7 @@
         <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/list_placeholder"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center"
             android:textAlignment="center"

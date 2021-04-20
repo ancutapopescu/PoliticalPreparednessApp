@@ -1,6 +1,7 @@
 package com.example.android.politicalpreparedness.representative
 
 import android.Manifest
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
@@ -10,15 +11,18 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.representative.DetailFragment.Companion.REQUEST_LOCATION_PERMISSION
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import com.example.android.politicalpreparedness.representative.adapter.setNewValue
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import java.util.Locale
 
 class DetailFragment : Fragment() {
@@ -41,6 +45,7 @@ class DetailFragment : Fragment() {
         val binding = FragmentRepresentativeBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+
 
         //TODO: Define and assign Representative adapter
         val representativeAdapter = RepresentativeListAdapter()
@@ -84,12 +89,11 @@ class DetailFragment : Fragment() {
 
     private fun checkLocationPermissions(): Boolean {
         return if (isPermissionGranted()) {
-            getLocation()
             true
         } else {
             ActivityCompat.requestPermissions(
                     requireActivity(),
-                    arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                    arrayOf<String>(ACCESS_FINE_LOCATION),
                     REQUEST_LOCATION_PERMISSION
             )
             false
@@ -103,17 +107,21 @@ class DetailFragment : Fragment() {
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
-        private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
         //TODO: Get location from LocationServices
         //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
         if (checkLocationPermissions()) {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                val address = geoCodeLocation(location)
-                viewModel.getAddressFromLocation(address)
-            }
+            LocationServices.getFusedLocationProviderClient(requireContext())
+                    .lastLocation.addOnSuccessListener { location ->
+                        viewModel.getAddressFromLocation(geoCodeLocation(location))
+                        viewModel.getRepresentatives(viewModel.address.value.toString())
+                    }
+        }
+        else {
+            // Request location permission here instead of in checkLocationPermissions
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
         }
     }
 

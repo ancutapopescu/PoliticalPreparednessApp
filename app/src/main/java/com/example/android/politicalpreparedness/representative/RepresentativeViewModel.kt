@@ -35,7 +35,7 @@ class RepresentativeViewModel: ViewModel() {
 
      */
     fun getRepresentatives(address: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val (offices, officials) = CivicsApi.retrofitService.getRepresentatives(address)
             _representatives.value = offices.flatMap { office ->
                 office.getRepresentatives(officials)
@@ -50,7 +50,7 @@ class RepresentativeViewModel: ViewModel() {
     }
 
     init {
-        // Avoid a crash in case which the user clicks on find my representatives without adding any an ddress.
+        // Avoid a crash in case which the user clicks on find my representatives without adding an ddress.
         _address.value = Address("", "", "", "Alabama", "")
     }
 

@@ -28,7 +28,7 @@ class ElectionsFragment: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
         //TODO: Add binding values
         //Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
