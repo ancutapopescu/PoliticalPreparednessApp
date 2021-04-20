@@ -56,6 +56,7 @@
             app:layout_constraintBottom_toTopOf="@id/rv_upcoming_elections"
             style="@style/header"/>
 
+        <!--app:listData="@{viewModel.upcomingElections}"-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_upcoming_elections"
             android:layout_width="0dp"
@@ -65,7 +66,6 @@
             app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@id/tv_upcoming_elections"
-            app:listData="@{viewModel.upcomingElections}"
             tools:listitem="@layout/item_election"/>
 
 
@@ -86,11 +86,12 @@
             app:layout_constraintTop_toBottomOf="@id/rv_upcoming_elections"
             style="@style/title"/>
 
+
+        <!--app:listData="@{viewModel.followedElections}"-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_saved_elections"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:listData="@{viewModel.followedElections}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guidelineEnd"

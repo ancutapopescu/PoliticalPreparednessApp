@@ -22,6 +22,10 @@ class ElectionsFragment: Fragment() {
     //TODO: Declare ViewModel
     private lateinit var viewModel: ElectionsViewModel
 
+    //TODO: Initiate recycler adapters
+    private lateinit var adapterUpcomingElections: ElectionListAdapter
+    private lateinit var adapterSavedElections: ElectionListAdapter
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -40,45 +44,48 @@ class ElectionsFragment: Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(ElectionsViewModel::class.java)
         binding.viewModel = viewModel
 
+        //TODO: Populate recycler adapters
+        adapterUpcomingElections = ElectionListAdapter(ElectionListener {
+            findNavController().navigate(
+                    ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it))
+        })
+        binding.rvUpcomingElections.adapter = adapterUpcomingElections
+
+        // Setup Recycler View for saved elections
+        adapterSavedElections = ElectionListAdapter(ElectionListener {
+            findNavController().navigate(
+                    ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it))
+        })
+        binding.rvSavedElections.adapter = adapterSavedElections
+
         //TODO: Link elections to voter info
         //Observe the navigateToDetailElection LiveData and Navigate when it isn't null.
         //After navigating, call onElectionNavigated() so that the ViewModel is ready
         // for another navigation event.
         //Add an observer on navigateToDetailElection that calls navigate() to go
         // to the detail screen when the Election is not null.
-        viewModel.navigateToDetailElection.observe(viewLifecycleOwner, Observer {
+        viewModel.upcomingElections.observe(viewLifecycleOwner, Observer {
             it?.let {
-                viewModel.onElectionNavigated()
-                this.findNavController().navigate(
-                        ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it))
+                adapterUpcomingElections.submitList(it)
             }
         })
 
-        //TODO: Initiate recycler adapters
-
-        //TODO: Populate recycler adapters
-        val adapterUpcomingElections = ElectionListAdapter(ElectionListener { election ->
-            viewModel.navigateToDetailElection
-            viewModel.onElectionClicked(election)
+        viewModel.followedElections.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapterSavedElections.submitList(it)
+            }
         })
-        binding.rvUpcomingElections.adapter = adapterUpcomingElections
-
-        // Setup Recycler View for saved elections
-        val adapterSavedElections = ElectionListAdapter(ElectionListener { election ->
-            viewModel.navigateToDetailElection
-            viewModel.onElectionClicked(election)
-        })
-        binding.rvSavedElections.adapter = adapterSavedElections
 
         return binding.root
 
     }
 
     //TODO: Refresh adapters when fragment loads
-    @BindingAdapter("listData")
+
+    /*@BindingAdapter("listData")
     fun bindRecyclerView(recyclerView: RecyclerView, data: List<Election>?){
         val adapter = recyclerView.adapter as ElectionListAdapter
         adapter.submitList(data)
-    }
+    }*/
 
 }
