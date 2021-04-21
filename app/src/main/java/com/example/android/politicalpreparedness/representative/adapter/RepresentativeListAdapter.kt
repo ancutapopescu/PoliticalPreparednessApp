@@ -12,16 +12,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.ItemElectionBinding
 import com.example.android.politicalpreparedness.databinding.ItemRepresentativeBinding
+import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter.Companion.from
 import com.example.android.politicalpreparedness.election.adapter.ElectionViewHolder
 import com.example.android.politicalpreparedness.network.models.Channel
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.representative.model.Representative
 
-class RepresentativeListAdapter: ListAdapter<Representative, RepresentativeViewHolder>(RepresentativeDiffCallback()) {
+class RepresentativeListAdapter:
+        ListAdapter<Representative, RepresentativeViewHolder>(RepresentativeDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepresentativeViewHolder {
-        return RepresentativeViewHolder(ItemRepresentativeBinding.inflate(LayoutInflater.from(parent.context)))
-    }
+        override fun onCreateViewHolder(parent: ViewGroup,
+                                        viewType: Int): RepresentativeViewHolder {
+            return from(parent)
+        }
 
     //TODO: Bind ViewHolder
     override fun onBindViewHolder(holder: RepresentativeViewHolder, position: Int) {

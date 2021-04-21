@@ -6,13 +6,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.politicalpreparedness.databinding.ItemElectionBinding
+import com.example.android.politicalpreparedness.databinding.ItemRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
+import com.example.android.politicalpreparedness.representative.adapter.RepresentativeViewHolder
 
 class ElectionListAdapter(private val clickListener: ElectionListener):
         ListAdapter<Election, ElectionViewHolder>(ElectionDiffCallback()) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElectionViewHolder {
-        return ElectionViewHolder(ItemElectionBinding.inflate(LayoutInflater.from(parent.context)))
+    override fun onCreateViewHolder(parent: ViewGroup,
+                                    viewType: Int): ElectionViewHolder {
+        return from(parent)
     }
 
     //TODO: Bind ViewHolder
@@ -28,13 +31,14 @@ class ElectionListAdapter(private val clickListener: ElectionListener):
 
     //TODO: Add companion object to inflate ViewHolder (from)
     companion object {
-        fun from(parent: ViewGroup): ElectionViewHolder {
+        fun from(parent: ViewGroup): ElectionListAdapter.ElectionViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ItemElectionBinding.inflate(layoutInflater, parent, false)
             return ElectionViewHolder(binding)
         }
     }
 }
+
 
 //TODO: Create ElectionViewHolder
 //Create ElectionViewHolder inner class, and implement the bind() method
