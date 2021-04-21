@@ -13,31 +13,36 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class VoterInfoViewModel(val election: Election, application: Application) : ViewModel() {
+class VoterInfoViewModel(private val dataSource: ElectionDao,
+                         private val electionId: Int,
+                         private val division: Division) : ViewModel() {
 
-    // Create the database singleton.
-    // Define a database variable and assign it to getDatabase(), passing the application.
-    private val database = getInstance(application)
+    var electionFromDatabase: Election? = null
 
-    // Create the repository.
-    // Instantiate the variable by passing in the singleton ElectionDatabase object.
-    private val electionRepository = ElectionRepository(database)
 
     //TODO: Add live data to hold voter info
-    val voterInfo = electionRepository.voterInfo
+    private val _voterInfo = MutableLiveData<VoterInfoResponse>()
+    val voterInfo: LiveData<VoterInfoResponse>
+    get() = _voterInfo
 
-    private val _isElectionSaved = MutableLiveData<Boolean>()
-    val isElectionSaved: LiveData<Boolean>
-        get() = _isElectionSaved
 
     //TODO: Add var and methods to populate voter info
+    init {
+        getVoterInfo()
+        getElectionFromDatabase()
+    }
 
-    fun getVoterInfo(electionId: Int, address: String) =
-            viewModelScope.launch {
-                electionRepository.getVoterInfo(electionId, address)
+    private fun getVoterInfo() {
+        viewModelScope.launch {
+            var address = "country:${division.country}"
+
+            if (division.state.isNotEmpty()) {
+                address += "/state:${division.state}"
             }
 
-
+            _voterInfo.value = CivicsApi.retrofitService.getVoterInfo(address, electionId)
+        }
+    }
 
     //TODO: Add var and methods to support loading URLs
     // Voting Locations
@@ -73,11 +78,14 @@ class VoterInfoViewModel(val election: Election, application: Application) : Vie
     /**
      * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
      */
+    private val _isElectionSaved = MutableLiveData<Boolean>()
+    val isElectionSaved: LiveData<Boolean>
+        get() = _isElectionSaved
 
     private fun saveElectionToDatabase() {
         viewModelScope.launch {
             voterInfo.value?.let {
-                voterInfo.value?.let { database.electionDao.insert(it.election) }
+                voterInfo.value?.let { dataSource.insert(it.election) }
                 _isElectionSaved.value = true
             }
         }
@@ -85,8 +93,15 @@ class VoterInfoViewModel(val election: Election, application: Application) : Vie
 
     private fun removeElectionFromDatabase() {
         viewModelScope.launch {
-            voterInfo.value?.let { database.electionDao.deleteElection(it.election.id)}
+            voterInfo.value?.let { dataSource.deleteElection(it.election.id)}
             _isElectionSaved.value = false
+        }
+    }
+
+    private fun getElectionFromDatabase() {
+        viewModelScope.launch {
+            electionFromDatabase = dataSource.getElectionById(electionId)
+            _isElectionSaved.value = electionFromDatabase != null
         }
     }
 

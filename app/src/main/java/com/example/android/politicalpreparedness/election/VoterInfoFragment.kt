@@ -23,22 +23,22 @@ class VoterInfoFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         //TODO: Add binding values
-        val binding: FragmentVoterInfoBinding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.fragment_voter_info,
-                container,
-                false)
-
-        // This line gets the selected Election object from the Safe Args.
-        val selectedElection = VoterInfoFragmentArgs.fromBundle(requireArguments()).selectedElection
+        val binding: FragmentVoterInfoBinding =
+        DataBindingUtil.inflate(
+                inflater, R.layout.fragment_voter_info, container, false)
         binding.lifecycleOwner = this
-        binding.election = selectedElection
+        binding.viewModel = viewModel
 
 
         //TODO: Add ViewModel values and create ViewModel
-        val viewModelFactory = VoterInfoViewModelFactory(selectedElection, requireActivity().application)
+        val bundle = VoterInfoFragmentArgs.fromBundle(requireArguments())
+        val electionId = bundle.argumentElectionId
+        val division = bundle.argumentDivision
+
+        val application = requireNotNull(this.activity).application
+        val dataSource = ElectionDatabase.getInstance(application).electionDao
+        val viewModelFactory = VoterInfoViewModelFactory(dataSource, electionId, division)
         viewModel = ViewModelProvider(this, viewModelFactory).get(VoterInfoViewModel::class.java)
-        binding.viewModel = viewModel
 
 
 

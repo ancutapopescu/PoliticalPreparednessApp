@@ -70,6 +70,7 @@
             android:backgroundTint="@color/colorPrimaryDark"
             android:text="@string/representative_button"
             android:textColor="@color/white"
+            android:layout_marginBottom="@dimen/margin_normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart" />

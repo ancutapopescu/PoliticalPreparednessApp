@@ -3,6 +3,8 @@ package com.example.android.politicalpreparedness.election
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.android.politicalpreparedness.database.ElectionDao
+import java.lang.IllegalArgumentException
 
 //TODO: Create Factory to generate ElectionViewModel with provided election datasource
 class ElectionsViewModelFactory(private val context: Application) : ViewModelProvider.Factory {

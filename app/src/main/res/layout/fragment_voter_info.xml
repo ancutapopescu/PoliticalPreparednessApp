@@ -8,10 +8,6 @@
         <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.election.VoterInfoViewModel" />
-
-        <variable
-            name="election"
-            type="com.example.android.politicalpreparedness.network.models.Election" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

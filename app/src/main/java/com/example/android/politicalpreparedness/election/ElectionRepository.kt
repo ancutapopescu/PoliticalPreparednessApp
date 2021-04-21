@@ -47,15 +47,4 @@ class ElectionRepository(private val database: ElectionDatabase) {
         }
     }
 
-    // Refresh Voter Info
-    suspend fun getVoterInfo(electionId: Int, address: String) {
-        try {
-            withContext(Dispatchers.IO) {
-                val voterInfoResponse = CivicsApi.retrofitService.getVoterInfo(electionId, address)
-                voterInfo.postValue(voterInfoResponse)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 }

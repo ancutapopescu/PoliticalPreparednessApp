@@ -31,7 +31,7 @@ class ElectionListAdapter(private val clickListener: ElectionListener):
 
     //TODO: Add companion object to inflate ViewHolder (from)
     companion object {
-        fun from(parent: ViewGroup): ElectionListAdapter.ElectionViewHolder {
+        fun from(parent: ViewGroup):ElectionViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ItemElectionBinding.inflate(layoutInflater, parent, false)
             return ElectionViewHolder(binding)

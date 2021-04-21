@@ -47,14 +47,14 @@ class ElectionsFragment: Fragment() {
         //TODO: Populate recycler adapters
         adapterUpcomingElections = ElectionListAdapter(ElectionListener {
             findNavController().navigate(
-                    ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it))
+                    ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it.id, it.division))
         })
         binding.rvUpcomingElections.adapter = adapterUpcomingElections
 
         // Setup Recycler View for saved elections
         adapterSavedElections = ElectionListAdapter(ElectionListener {
             findNavController().navigate(
-                    ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it))
+                    ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it.id, it.division))
         })
         binding.rvSavedElections.adapter = adapterSavedElections
 
