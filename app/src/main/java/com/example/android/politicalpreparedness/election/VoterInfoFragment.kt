@@ -22,51 +22,48 @@ class VoterInfoFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        //TODO: Add binding values
-        val binding: FragmentVoterInfoBinding =
-        DataBindingUtil.inflate(
-                inflater, R.layout.fragment_voter_info, container, false)
+
+//TODO: Add ViewModel values and create ViewModel
+    val bundle = VoterInfoFragmentArgs.fromBundle(requireArguments())
+    val electionId = bundle.argumentElectionId
+    val division = bundle.argumentDivision
+
+    val application = requireNotNull(this.activity).application
+    val dataSource = ElectionDatabase.getInstance(application).electionDao
+    val viewModelFactory = VoterInfoViewModelFactory(dataSource, electionId, division)
+    viewModel = ViewModelProvider(this, viewModelFactory).get(VoterInfoViewModel::class.java)
+
+//TODO: Add binding values
+     val binding: FragmentVoterInfoBinding =
+             DataBindingUtil.inflate(inflater, R.layout.fragment_voter_info, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+//TODO: Populate voter info -- hide views without provided data.
+/**
+Hint: You will need to ensure proper data is provided from previous fragment.
+*/
 
-        //TODO: Add ViewModel values and create ViewModel
-        val bundle = VoterInfoFragmentArgs.fromBundle(requireArguments())
-        val electionId = bundle.argumentElectionId
-        val division = bundle.argumentDivision
-
-        val application = requireNotNull(this.activity).application
-        val dataSource = ElectionDatabase.getInstance(application).electionDao
-        val viewModelFactory = VoterInfoViewModelFactory(dataSource, electionId, division)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(VoterInfoViewModel::class.java)
-
-
-
-        //TODO: Populate voter info -- hide views without provided data.
-        /**
-        Hint: You will need to ensure proper data is provided from previous fragment.
-         */
-
-        //TODO: Handle loading of URLs
-        // Voting Locations
-        viewModel.votingLocationUrl.observe(viewLifecycleOwner, Observer {
+//TODO: Handle loading of URLs
+// Voting Locations
+    viewModel.votingLocationUrl.observe(viewLifecycleOwner, Observer {
             it?.let {
                 loadUrl(it)
                 viewModel.votingLocationsNavigated()
             }
         })
 
-        // Ballot Information
-        viewModel.ballotInformationUrl.observe(viewLifecycleOwner, Observer {
+    // Ballot Information
+    viewModel.ballotInformationUrl.observe(viewLifecycleOwner, Observer {
             it?.let {
                 loadUrl(it)
                 viewModel.ballotInformationNavigated()
             }
         })
 
-        //TODO: Handle save button UI state
-        //TODO: cont'd Handle save button clicks
-        viewModel.isElectionSaved.observe(viewLifecycleOwner, Observer {  isElectionSaved ->
+//TODO: Handle save button UI state
+//TODO: cont'd Handle save button clicks
+    viewModel.isElectionSaved.observe(viewLifecycleOwner, Observer {  isElectionSaved ->
             if (isElectionSaved) {
                 binding.followUnfollowButton.text = getString(R.string.follow_button)
             } else {
@@ -79,7 +76,7 @@ class VoterInfoFragment : Fragment() {
     }
 
 
-    //TODO: Create method to load URL intents
+//TODO: Create method to load URL intents
     private fun loadUrl(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)

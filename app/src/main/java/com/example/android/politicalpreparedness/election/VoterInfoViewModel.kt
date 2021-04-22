@@ -9,6 +9,7 @@ import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Division
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
+import com.example.android.politicalpreparedness.network.models.toFormattedString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,7 +41,7 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
                 address += "/state:${division.state}"
             }
 
-            _voterInfo.value = CivicsApi.retrofitService.getVoterInfo(address, electionId)
+            _voterInfo.value = CivicsApi.retrofitService.getVoterInfo(division.toFormattedString(), electionId)
         }
     }
 
