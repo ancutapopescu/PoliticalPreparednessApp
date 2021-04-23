@@ -33,7 +33,7 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
         getElectionFromDatabase()
     }
 
-    private fun getVoterInfo() {
+    /*private fun getVoterInfo() {
         viewModelScope.launch {
             var address = "country:${division.country}"
 
@@ -43,7 +43,25 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
 
             _voterInfo.value = CivicsApi.retrofitService.getVoterInfo(division.toFormattedString(), electionId)
         }
+    }*/
+
+    private fun getVoterInfo() {
+        viewModelScope.launch {
+            var address = "country:${division.country}"
+            // state can be sometimes missing from the division retrieved
+            // from the electionQuery API call,
+            // but have to add some state to the voterinfo API call or it will be rejected
+            if (!division.state.isBlank() && !division.state.isEmpty()) {
+                address += "/state:${division.state}"
+            } else {
+                address += "/state:ca"
+            }
+            _voterInfo.value = CivicsApi.retrofitService.getVoterInfo(
+                    address, electionId)
+        }
     }
+
+
 
     //TODO: Add var and methods to support loading URLs
     // Voting Locations
