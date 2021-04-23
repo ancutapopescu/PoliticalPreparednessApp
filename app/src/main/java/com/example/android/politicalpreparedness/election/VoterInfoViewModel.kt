@@ -65,12 +65,12 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
 
     //TODO: Add var and methods to support loading URLs
     // Voting Locations
-    private val _votingLocationsUrl = MutableLiveData<String>()
-    val votingLocationUrl: LiveData<String>
+    private val _votingLocationsUrl = MutableLiveData<String?>()
+    val votingLocationUrl: LiveData<String?>
         get() = _votingLocationsUrl
 
     fun votingLocationsClick() {
-        _votingLocationsUrl.value = voterInfo.value?.state?.get(0)?.electionAdministrationBody?.votingLocationFinderUrl
+        _votingLocationsUrl.value = _voterInfo.value?.state?.get(0)?.electionAdministrationBody?.votingLocationFinderUrl
     }
 
     fun votingLocationsNavigated() {
@@ -78,12 +78,12 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
     }
 
     // Ballot Information
-    private val _ballotInformationUrl = MutableLiveData<String>()
-    val ballotInformationUrl: LiveData<String>
+    private val _ballotInformationUrl = MutableLiveData<String?>()
+    val ballotInformationUrl: LiveData<String?>
         get() = _ballotInformationUrl
 
     fun ballotInformationClick() {
-        _votingLocationsUrl.value = voterInfo.value?.state?.get(0)?.electionAdministrationBody?.ballotInfoUrl
+        _votingLocationsUrl.value = _voterInfo.value?.state?.get(0)?.electionAdministrationBody?.ballotInfoUrl
     }
 
     fun ballotInformationNavigated() {
@@ -97,16 +97,17 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
     /**
      * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
      */
-    private val _isElectionSaved = MutableLiveData<Boolean>(false)
+
+
+
+    private val _isElectionSaved = MutableLiveData<Boolean>()
     val isElectionSaved: LiveData<Boolean>
         get() = _isElectionSaved
 
     private fun saveElectionToDatabase() {
         viewModelScope.launch {
-            voterInfo.value?.let {
                 voterInfo.value?.let { dataSource.insert(it.election) }
                 _isElectionSaved.value = true
-            }
         }
     }
 
