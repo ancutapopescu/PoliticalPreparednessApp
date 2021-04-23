@@ -97,7 +97,7 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
     /**
      * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
      */
-    private val _isElectionSaved = MutableLiveData<Boolean>()
+    private val _isElectionSaved = MutableLiveData<Boolean>(false)
     val isElectionSaved: LiveData<Boolean>
         get() = _isElectionSaved
 
