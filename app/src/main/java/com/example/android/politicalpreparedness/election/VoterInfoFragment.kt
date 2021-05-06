@@ -63,11 +63,11 @@ Hint: You will need to ensure proper data is provided from previous fragment.
 
 //TODO: Handle save button UI state
 //TODO: cont'd Handle save button clicks
-    viewModel.isElectionSaved.observe(viewLifecycleOwner, Observer {  isElectionSaved ->
-            if (isElectionSaved) {
-                binding.followUnfollowButton.text = getString(R.string.follow_button)
-            } else {
+    viewModel.isElectionFollowed.observe(viewLifecycleOwner, Observer {  isElectionFollowed ->
+            if (isElectionFollowed == true) {
                 binding.followUnfollowButton.text = getString(R.string.unfollow_button)
+            } else {
+                binding.followUnfollowButton.text = getString(R.string.follow_button)
             }
         })
 

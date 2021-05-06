@@ -24,33 +24,18 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
     //TODO: Add live data to hold voter info
     private val _voterInfo = MutableLiveData<VoterInfoResponse>()
     val voterInfo: LiveData<VoterInfoResponse>
-    get() = _voterInfo
+        get() = _voterInfo
 
 
     //TODO: Add var and methods to populate voter info
     init {
         getVoterInfo()
-        getElectionFromDatabase()
     }
 
-    /*private fun getVoterInfo() {
-        viewModelScope.launch {
-            var address = "country:${division.country}"
-
-            if (division.state.isNotEmpty()) {
-                address += "/state:${division.state}"
-            }
-
-            _voterInfo.value = CivicsApi.retrofitService.getVoterInfo(division.toFormattedString(), electionId)
-        }
-    }*/
-
+    // The state can be sometimes missing from the API call, but it has to add some state to the voterinfo API call or it will be rejected.
     private fun getVoterInfo() {
         viewModelScope.launch {
             var address = "country:${division.country}"
-            // state can be sometimes missing from the division retrieved
-            // from the electionQuery API call,
-            // but have to add some state to the voterinfo API call or it will be rejected
             if (!division.state.isBlank() && !division.state.isEmpty()) {
                 address += "/state:${division.state}"
             } else {
@@ -60,7 +45,6 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
                     address, electionId)
         }
     }
-
 
 
     //TODO: Add var and methods to support loading URLs
@@ -98,38 +82,26 @@ class VoterInfoViewModel(private val dataSource: ElectionDao,
      * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
      */
 
+    private val _isElectionFollowed: LiveData<Int>
+        get() = dataSource.isElectionFollowed(electionId)
 
+    val isElectionFollowed =
+            Transformations.map(_isElectionFollowed) { followValue ->
+                followValue?.let {
+                    followValue == 1
+                }
+            }
 
-    private val _isElectionSaved = MutableLiveData<Boolean>()
-    val isElectionSaved: LiveData<Boolean>
-        get() = _isElectionSaved
-
-    private fun saveElectionToDatabase() {
-        viewModelScope.launch {
-                voterInfo.value?.let { dataSource.insert(it.election) }
-                _isElectionSaved.value = true
-        }
-    }
-
-    private fun removeElectionFromDatabase() {
-        viewModelScope.launch {
-            voterInfo.value?.let { dataSource.deleteElection(it.election.id)}
-            _isElectionSaved.value = false
-        }
-    }
-
-    private fun getElectionFromDatabase() {
-        viewModelScope.launch {
-            electionFromDatabase = dataSource.getElectionById(electionId)
-            _isElectionSaved.value = electionFromDatabase != null
-        }
-    }
 
     fun followUnfollowButton() {
-        if (_isElectionSaved.value == true) {
-            removeElectionFromDatabase()
-        } else {
-            saveElectionToDatabase()
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                if (isElectionFollowed.value == true) {
+                    dataSource.unfollowElection(electionId)
+                } else {
+                    dataSource.followElection(electionId)
+                }
+            }
         }
     }
 }
